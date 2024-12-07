@@ -16,9 +16,10 @@ public class ProductoModel {
     public ProductoModel() {
     }
 
-    public ProductoModel(String nombre, String idSucursal) {
+    public ProductoModel(String nombre, int stock, String idSucursal) {
         this.id = UUID.randomUUID().toString();
         this.nombre = nombre;
+        this.stock = stock;
         this.idSucursal = idSucursal;
     }
 

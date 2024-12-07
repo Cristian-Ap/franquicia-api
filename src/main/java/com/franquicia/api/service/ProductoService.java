@@ -37,7 +37,7 @@ public class ProductoService {
                 .flatMap( sucursalModel -> productoRepository.save(producto));
     }
 
-    public Mono<ProductoModel> agregarSucursalAFranquicia(String idSucursal, ProductoModel producto){
+    public Mono<ProductoModel> agregarProductoASucursal(String idSucursal, ProductoModel producto){
         return sucursalService.obtenerPorId(idSucursal)
                 .flatMap(
                         sucursalModel -> {
@@ -58,6 +58,22 @@ public class ProductoService {
                 ).flatMap(
                         productoModel -> {
                             productoModel.setNombre(nuevoNombre);
+                            return productoRepository.save(productoModel);
+                        }
+                );
+    }
+
+    public Mono<ProductoModel> editarStock(String id, int nuevoStock){
+        return  productoRepository.findById(id)
+                .switchIfEmpty(
+                        Mono.error(
+                                new ResponseStatusException(
+                                        HttpStatus.NOT_FOUND, "Producto con id = " + id + " no encontrado."
+                                )
+                        )
+                ).flatMap(
+                        productoModel -> {
+                            productoModel.setStock(nuevoStock);
                             return productoRepository.save(productoModel);
                         }
                 );
