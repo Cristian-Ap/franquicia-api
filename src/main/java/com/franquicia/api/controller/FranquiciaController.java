@@ -1,7 +1,9 @@
 package com.franquicia.api.controller;
 
 import com.franquicia.api.model.FranquiciaModel;
+import com.franquicia.api.model.SucursalModel;
 import com.franquicia.api.service.FranquiciaService;
+import com.franquicia.api.service.SucursalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,9 +14,11 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/api/franquicia")
 public class FranquiciaController {
     public final FranquiciaService franquiciaService;
+    public final SucursalService sucursalService;
 
-    public FranquiciaController(FranquiciaService franquiciaService) {
+    public FranquiciaController(FranquiciaService franquiciaService, SucursalService sucursalService) {
         this.franquiciaService = franquiciaService;
+        this.sucursalService = sucursalService;
     }
 
     @GetMapping
@@ -28,6 +32,11 @@ public class FranquiciaController {
     @PostMapping
     public Mono<FranquiciaModel> crearFranquicia(@RequestBody FranquiciaModel franquicia){
         return franquiciaService.crearNueva(franquicia);
+    }
+
+    @PostMapping("/{idFranquicia}/agregarsucursal")
+    public Mono<SucursalModel> agregarSucursalAFranquicia(@PathVariable String idFranquicia, @RequestBody SucursalModel sucursal){
+        return sucursalService.agregarSucursalAFranquicia(idFranquicia, sucursal);
     }
 
     @PatchMapping("/{idFranquicia}/nombre")
